@@ -37,7 +37,8 @@ dbgLog( o ); // no output, because of low error level
 errLog( "End-of-Example" ); // will print red on white
 ```
 
-Result
+
+Result - if the example is named "logger.js":
 
 ```
 [logger#10] Current Error Level 5
