@@ -37,3 +37,10 @@ dbgLog( o ); // no output, because of low error level
 errLog( "End-of-Example" ); // will print red on white
 ```
 
+Result
+
+```
+[logger#10] Current Error Level 5
+[logger#18] [name]=snlog; [arr]=1,2,3,4; [f]=function;
+[logger#21] End-of-Example
+```
