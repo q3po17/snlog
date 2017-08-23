@@ -1,11 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
-//	Version 1: 14.08.2017 (33) 09:44:25 
-//		clear subscriptions by module
+//	Version 0.0.1: 14.08.2017 (33) 09:44:25 
 //
-//
-/* global console, module */
 var path = require( 'path' );
 var fs = require( "fs" );
+
+// console colors for Foreground and Background
 var colors = {};
 colors.Reset = "\x1b[0m";
 colors.Bright = "\x1b[1m";
@@ -30,9 +29,11 @@ colors.BgBlue = "\x1b[44m";
 colors.BgMagenta = "\x1b[45m";
 colors.BgCyan = "\x1b[46m";
 colors.BgWhite = "\x1b[47m";
+
+// default error level
 var currentErrorLevel = 5;
 
-function prep( arr ) {
+function arguments2string( arr ) {
 	var msg = '';
 	for ( var idx = 0; idx < arr.length; ++idx ) {
 		var arg = arr[ idx ];
@@ -53,7 +54,9 @@ function prep( arr ) {
 		}
 	}
 	return msg;
-} ///////////////////////////////////////////////////////////////////////////////
+}
+
+///////////////////////////////////////////////////////////////////////////////
 // enhance the stack
 var s = global.__stack;
 if ( s === undefined ) {
@@ -81,27 +84,6 @@ if ( s === undefined ) {
 		}
 	} );
 }
-///////////////////////////////////////////////////////////////////////////////
-// colored log
-function xlog( fg = colors.FgGreen, bg = colors.BgBlack, level = 3 ) {
-	return function() {
-		if ( currentErrorLevel > level ) {
-			let s = showStack( 2 );
-			console.log( fg + bg + "[" + s.name + "#" + s.line + "]", prep( arguments ), colors.Reset );
-		}
-	};
-}
-
-function ylog( title, level ) {
-	"use strict";
-	level = level || 0;
-	return function() {
-		if ( currentErrorLevel > level ) {
-			var s = showStack( 2 );
-			console.log( title, "#" + s.line, s.name, prep( arguments ) );
-		}
-	};
-}
 
 function showStack( start ) {
 	var s = __stack;
@@ -113,35 +95,38 @@ function showStack( start ) {
 	};
 };
 
+///////////////////////////////////////////////////////////////////////////////
+// colored log to console
+function clog( fg = colors.FgGreen, bg = colors.BgBlack, level = 3 ) {
+	return function() {
+		if ( currentErrorLevel > level ) {
+			let s = showStack( 2 );
+			console.log( fg + bg + "[" + s.name + "#" + s.line + "]", arguments2string( arguments ), colors.Reset );
+		}
+	};
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// log to file
 function flog( filename ) {
-	"use strict";
 	fs.writeFile( filename, '########\n', function( err ) {
 		if ( err ) throw err;
 	} );
 	return function() {
-		fs.appendFile( filename, prep( arguments ) + "\n", function( err ) {} );
+		fs.appendFile( filename, arguments2string( arguments ) + "\n", function( err ) {} );
 	};
 }
 ///////////////////////////////////////////////////////////////////////////////
 //
 module.exports.setErrorLevel = function( level ) {
-	"use strict";
-	// console.log( "[log] error level to", level );
 	currentErrorLevel = level;
 };
 ///////////////////////////////////////////////////////////////////////////////
 //
 module.exports.getErrorLevel = function() {
-	"use strict";
-	// console.log( "error level is", currentErrorLevel );
 	return currentErrorLevel;
 };
 module.exports.colors = colors;
-module.exports.xlog = xlog;
-module.exports.ylog = ylog;
-module.exports.flog = flog;
+module.exports.clog = clog; // log to console
+module.exports.flog = flog; // log to file
 module.exports.showStack = showStack;
-module.exports.log = function( title, level ) {
-	"use strict";
-	return ylog( title, level );
-};
