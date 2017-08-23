@@ -1,0 +1,23 @@
+{
+  "name": "snlog",
+  "version": "0.0.1",
+  "description": "A Simple Logger for Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/q3po17/snlog.git"
+  },
+  "keywords": [
+    "node",
+    "logger"
+  ],
+  "author": "q3po17",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/q3po17/snlog/issues"
+  },
+  "homepage": "https://github.com/q3po17/snlog#readme"
+}
