@@ -16,7 +16,7 @@ Example:
 ```javascript
 const log = require( 'snlog' );
 
-// default errorlevel of xlog is 3!
+// default errorlevel of clog is 3!
 const dbgLog = log.clog( log.colors.FgYellow );
 
 // errLog has error level 0; it will print output 
